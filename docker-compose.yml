@@ -32,5 +32,8 @@ services:
      
   ventas-service:
     build: ventas-service/
+    image: ms-ventas-service
+    depends_on: compras-service
+    container_name: ventas-service-containerx
     ports:
      - "8082:8080"
