@@ -1,10 +1,48 @@
 version: "2"
 services:
-  bodega-service:
-    build: bodega-service/
- #    command: python app.py
+  
+  spring-config-server:
+    build: spring-config-server/
     ports:
      - "8888:8888"
+     
+  spring-eureka-server:
+    build: spring-eureka-server/
+    ports:
+     - "8761:8761"
+    depends_on: 
+      - spring-config-server     
+     
+  bodega-service:
+    build: bodega-service/
+    ports:
+     - "8081-8089:8081"
+    deploy:
+      mode: replicated
+      replicas: 3
+    depends_on: 
+      - spring-eureka-server
+      
+  compras-service:
+    build: compras-service/
+    ports:
+     - "8081:8080"
+    depends_on: 
+      - spring-eureka-server
+      
+  ventas-service:
+    build: ventas-service/
+    ports:
+     - "8082:8080"
+    depends_on: 
+      - spring-eureka-server     
+     
+     
+ # bodega-service:
+ #   build: bodega-service/
+ #    command: python app.py
+ #    ports:
+ #    - "8888:8888"
  #   volumes:
  #    - ./web:/code # modified here to take into account the new app path
  #   links:
@@ -25,15 +63,3 @@ services:
 #     - /var/run/docker.sock:/var/run/docker.sock
 #     - /proc/:/host/proc/:ro
 #     - /sys/fs/cgroup:/host/sys/fs/cgroup:ro
-  compras-service:
-    build: compras-service/
-    ports:
-     - "8081:8080"
-     
-  ventas-service:
-    build: ventas-service/
-    image: ms-ventas-service
-    depends_on: compras-service
-    container_name: ventas-service-containerx
-    ports:
-     - "8082:8080"
