@@ -12,16 +12,17 @@ import java.util.List;
 public class StockController {
 
     @GetMapping("/{idProducto}")
-    public void obtenerStockPorProducto(@PathVariable Integer idProducto){
+    public Integer obtenerStockPorProducto(@PathVariable Integer idProducto){
         log.info("obtenerStockPorProducto : " + idProducto);
+        return idProducto;
     }
 
-    @GetMapping("/add/{idProducto}/{cantidad}}")
+    @GetMapping("/add/{idProducto}/{cantidad}")
     public void incrementarStockProducto(@PathVariable Integer idProducto, @PathVariable Integer cantidad){
         log.info("incrementarStockProducto : " + idProducto + " " + cantidad);
     }
 
-    @GetMapping("/sub/{idProducto/{cantidad}}")
+    @GetMapping("/sub/{idProducto/{cantidad}")
     public void disminuirStockProducto(@PathVariable Integer idProducto, @PathVariable Integer cantidad){
         log.info("disminuirStockProducto : " + idProducto + " " + cantidad);
     }
