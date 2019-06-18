@@ -5,8 +5,6 @@ services:
     build: spring-config-server/
     ports:
      - "8888:8888"
-    networks:
-     - backend
      
   spring-eureka-server:
     build: spring-eureka-server/
@@ -14,8 +12,6 @@ services:
      - "8761:8761"
     depends_on: 
       - spring-config-server     
-    networks:
-     - backend
 
   spring-gateway-zuul:
     build: spring-eureka-server/
@@ -23,17 +19,13 @@ services:
      - "8765:8765"
     depends_on: 
       - spring-config-server     
-    networks:
-     - backend
 
-   spring-hystrix-dashboard:
+  spring-hystrix-dashboard:
     build: spring-hystrix-dashboard/
     ports:
      - "9999:9999"
     depends_on: 
       - spring-config-server     
-    networks:
-     - backend
      
   bodega-service:
     build: bodega-service/
@@ -41,13 +33,11 @@ services:
      - "8081-8089:8081"
     depends_on: 
       - spring-eureka-server
-          deploy:
-    restart_policy:
+    deploy:
+      restart_policy:
         condition: always
         max_attempts: 2
         window: 30s
-    network:
-     - backends
 
   ventas-service:
     build: bodega-service/
@@ -55,13 +45,11 @@ services:
      - "8801-8809:8801"
     depends_on: 
       - spring-eureka-server
-          deploy:
-    restart_policy:
+    deploy:
+      restart_policy:
         condition: always
         max_attempts: 2
         window: 30s
-    network:
-     - backends
 
   zipkin:
     image: openzipkin/zipkin
@@ -80,11 +68,7 @@ services:
     ports:
      - "15672:15672"
      - "5672:5672"
-     
-  networks:
-    - backend
-    - frontend    
-     
+          
 #  ventas-service:
 #    build: ventas-service/
 #    ports:
@@ -97,31 +81,4 @@ services:
 #    ports:
 #     - "8082:8080"
 #    depends_on: 
-#      - spring-eureka-server     
-     
-     
- # bodega-service:
- #   build: bodega-service/
- #    command: python app.py
- #    ports:
- #    - "8888:8888"
- #   volumes:
- #    - ./web:/code # modified here to take into account the new app path
- #   links:
- #    - redis
- #   environment:
- #    - DATADOG_HOST=datadog # used by the web app to initialize the Datadog library
-#  redis:
-#    image: redis
-#  # agent section
-#  datadog:
-#    build: datadog
-#    links:
-#     - redis # ensures that redis is a host that the container can find
-#     - web # ensures that the web app can send metrics
-#    environment:
-#     - DD_API_KEY=__your_datadog_api_key_here__
-#    volumes:
-#     - /var/run/docker.sock:/var/run/docker.sock
-#     - /proc/:/host/proc/:ro
-#     - /sys/fs/cgroup:/host/sys/fs/cgroup:ro
+#      - spring-eureka-server      
