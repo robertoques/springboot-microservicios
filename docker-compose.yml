@@ -53,8 +53,8 @@ services:
 
   zipkin:
     image: openzipkin/zipkin
-    enviroment:
-      RABBIT_URI: "amqp:localhost"
+    environment:
+      RABBIT_URI: "amqp:rabbit"
     ports:
      - "9411:9411"
      
@@ -62,9 +62,9 @@ services:
     image: rabbitmq:3-management
     environment:
 #       RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
-#       RABBITMQ_DEFAULT_USER: "rabbitmq"
-#       RABBITMQ_DEFAULT_PASS: "rabbitmq"
-#       RABBITMQ_DEFAULT_VHOST: "/"
+       RABBITMQ_DEFAULT_USER: "rabbitmq"
+       RABBITMQ_DEFAULT_PASS: "rabbitmq"
+       RABBITMQ_DEFAULT_VHOST: "/"
     ports:
      - "15672:15672"
      - "5672:5672"
